@@ -8,3 +8,7 @@ export type RootStackParamList = {
 
 export type Navigation =
   NativeStackScreenProps<RootStackParamList>["navigation"];
+
+export interface FirebaseError extends Error {
+  code: string;
+}

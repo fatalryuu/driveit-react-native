@@ -5,13 +5,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { Button } from "../components/common/Button/Button";
 import { Flex } from "../components/common/Flex/Flex";
 import { Input } from "../components/common/Input/Input";
 import { Spacer } from "../components/common/Spacer/Spacer";
 import { Typography } from "../components/common/Typography/Typography";
 import { COLORS } from "../palette";
-import { Navigation } from "../types";
+import { FirebaseError, Navigation } from "../types";
+import { FIREBASE_AUTH } from "../../firebase";
+import { useAuthListenerHook } from "../hooks/useAuthListenerHook";
 
 interface SignInPageProps {
   navigation: Navigation;
@@ -43,18 +46,38 @@ export const SignInPage: React.FC<SignInPageProps> = ({ navigation }) => {
     }
   }, [email, password]);
 
-  const handleSignIn = () => {
+  useAuthListenerHook(navigation);
+
+  const handleSignIn = async () => {
     if (password.length < 8) {
       setError("Password must have at least 8 characters");
       return;
     }
+
     setIsLoading(true);
+
+    try {
+      await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+    } catch (err) {
+      switch ((err as FirebaseError).code) {
+        case "auth/invalid-email":
+          setError("Invalid email format");
+          break;
+        case "auth/invalid-credential":
+          setError("Invalid email or password");
+          break;
+        default:
+          setError((err as FirebaseError).message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
       <Flex column alignItems="center">
-        <Typography size={32} weight="700">
+        <Typography size={36} weight="700">
           Welcome Back
         </Typography>
         <Spacer size={18} />

@@ -5,13 +5,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Button } from "../components/common/Button/Button";
 import { Flex } from "../components/common/Flex/Flex";
 import { Input } from "../components/common/Input/Input";
 import { Spacer } from "../components/common/Spacer/Spacer";
 import { Typography } from "../components/common/Typography/Typography";
 import { COLORS } from "../palette";
-import { Navigation } from "../types";
+import { FirebaseError, Navigation } from "../types";
+import { FIREBASE_AUTH } from "../../firebase";
+import { useAuthListenerHook } from "../hooks/useAuthListenerHook";
 
 interface SignUpPageProps {
   navigation: Navigation;
@@ -45,7 +48,9 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ navigation }) => {
     }
   }, [email, password, repeatPassword]);
 
-  const handleSignUp = () => {
+  useAuthListenerHook(navigation);
+
+  const handleSignUp = async () => {
     if (password !== repeatPassword) {
       setError("Passwords don't match");
       return;
@@ -54,7 +59,25 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ navigation }) => {
       setError("Password must have at least 8 characters");
       return;
     }
+
     setIsLoading(true);
+
+    try {
+      await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+    } catch (err) {
+      switch ((err as FirebaseError).code) {
+        case "auth/invalid-email":
+          setError("Invalid email format");
+          break;
+        case "auth/email-already-in-use":
+          setError("Email is already in use");
+          break;
+        default:
+          setError((err as FirebaseError).message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
