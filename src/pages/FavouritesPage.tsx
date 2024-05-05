@@ -17,7 +17,9 @@ export const FavouritesPage: React.FC<FavouritesPageProps> = ({
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <ScrollView style={styles.scrollContainer}>
         <Flex column gap={20}>
-          <Typography>Favourites</Typography>
+          <Typography weight="700" size={38}>
+            Favourites
+          </Typography>
         </Flex>
         <Spacer size={120} />
       </ScrollView>

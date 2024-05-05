@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
+  View,
 } from "react-native";
 import { signOut } from "firebase/auth";
 import { Button } from "../components/common/Button/Button";
@@ -76,6 +77,14 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
     handleLogoutClick();
   };
 
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <ScrollView style={styles.scrollContainer}>
@@ -83,43 +92,39 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
           <Flex column gap={12}>
             <Flex column gap={8}>
               <Typography size={38} weight="700">
-                Profile
+                My Profile
               </Typography>
               <Typography size={20} weight="600">
                 {user?.email}
               </Typography>
             </Flex>
-            {user ? (
-              <Flex column gap={10} alignItems="center">
-                {inputs.map((name) => (
-                  <ProfileInput
-                    placeholder={name.slice(0, 1).toUpperCase() + name.slice(1)}
-                    name={name}
-                    value={user[name] || ""}
-                    disabled={!isEditing}
-                    setUser={setUser}
-                    key={name}
-                  />
-                ))}
-              </Flex>
-            ) : (
-              <ActivityIndicator />
-            )}
+            <Flex column gap={12} alignItems="center">
+              {inputs.map((name) => (
+                <ProfileInput
+                  placeholder={name.slice(0, 1).toUpperCase() + name.slice(1)}
+                  name={name}
+                  value={user[name] || ""}
+                  disabled={!isEditing}
+                  setUser={setUser}
+                  key={name}
+                />
+              ))}
+            </Flex>
           </Flex>
 
           <Flex column alignItems="center" gap={20}>
             <Flex column alignItems="center" gap={10}>
               <Button onClick={handleEditClick} disabled={isLoading}>
-                <Typography>
+                <Typography size={18}>
                   {isEditing ? "Save changes" : "Edit profile"}
                 </Typography>
               </Button>
               <Button onClick={handleLogoutClick} disabled={isLoading}>
-                <Typography>Logout</Typography>
+                <Typography size={18}>Logout</Typography>
               </Button>
             </Flex>
             <Button onClick={handleDeleteClick} dark disabled={isLoading}>
-              <Typography>Delete account</Typography>
+              <Typography size={18}>Delete account</Typography>
             </Button>
           </Flex>
         </Flex>
@@ -139,7 +144,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   scrollContainer: {
-    paddingTop: 70,
+    paddingTop: 60,
     width: "100%",
   },
 });

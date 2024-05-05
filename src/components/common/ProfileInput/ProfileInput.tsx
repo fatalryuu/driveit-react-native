@@ -27,7 +27,7 @@ export const ProfileInput: React.FC<ProgileInputProps> = ({
 
   return (
     <View style={styles.container}>
-      <Flex column alignItems="flex-start" gap={5}>
+      <Flex column alignItems="flex-start" gap={6}>
         <Typography>{placeholder}</Typography>
         <View style={containerStyle}>
           <TextInput

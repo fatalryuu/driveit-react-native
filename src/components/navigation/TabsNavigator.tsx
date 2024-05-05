@@ -30,6 +30,7 @@ const options = (name: TabsList) => ({
   tabBarStyle: {
     backgroundColor: COLORS.BLACK,
     borderTopWidth: 0,
+    height: 90,
   },
 });
 

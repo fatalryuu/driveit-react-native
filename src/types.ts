@@ -1,9 +1,11 @@
 import { type NativeStackScreenProps } from "@react-navigation/native-stack";
+import { FirestoreCar } from "./api/carsApi";
 
 export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   Main: undefined;
+  Car: { car: FirestoreCar };
 };
 
 export type TabsList = "Profile" | "Cars" | "Favourites";
