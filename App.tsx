@@ -4,13 +4,15 @@ import { SignInPage } from "./src/pages/SignInPage";
 import { SignUpPage } from "./src/pages/SignUpPage";
 import { RootStackParamList } from "./src/types";
 import { ProfilePage } from "./src/pages/ProfilePage";
+import { FavouritesPage } from "./src/pages/FavouritesPage";
+import { CarsPage } from "./src/pages/CarsPage";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignIn">
+      <Stack.Navigator>
         <Stack.Screen
           options={{ headerShown: false }}
           name="SignIn"
@@ -25,6 +27,16 @@ export default function App() {
           options={{ headerShown: false }}
           name="Profile"
           component={ProfilePage}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Cars"
+          component={CarsPage}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Favourites"
+          component={FavouritesPage}
         />
       </Stack.Navigator>
     </NavigationContainer>

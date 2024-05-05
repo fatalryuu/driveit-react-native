@@ -75,40 +75,46 @@ export const SignInPage: React.FC<SignInPageProps> = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Flex column alignItems="center">
-        <Typography size={36} weight="700">
-          Welcome Back
-        </Typography>
-        <Spacer size={18} />
-        <Typography size={18}>Please, enter your credentials</Typography>
-        <Spacer size={24} />
-        <Input value={email} setValue={setEmail} placeholder="Email" />
-        <Spacer size={16} />
-        <Input
-          value={password}
-          setValue={setPassword}
-          placeholder="Password"
-          password
-        />
-        <Spacer size={error ? 12 : 24} />
+        <Flex column gap={24}>
+          <Flex column gap={18}>
+            <Typography size={36} weight="700">
+              Welcome Back
+            </Typography>
+            <Typography size={18}>Please, enter your credentials</Typography>
+          </Flex>
+          <Flex column alignItems="center" gap={16}>
+            <Input value={email} setValue={setEmail} placeholder="Email" />
+            <Input
+              value={password}
+              setValue={setPassword}
+              placeholder="Password"
+              password
+            />
+          </Flex>
+        </Flex>
+
+        <Spacer size={error ? 12 : 20} />
         {error && <Typography color={COLORS.RED}>{error}</Typography>}
         <Spacer size={error ? 12 : 0} />
-        <Button onClick={handleSignIn} disabled={isDisabled || isLoading}>
-          <Typography
-            color={isLoading ? COLORS.LIGHT_GREY : COLORS.WHITE}
-            size={18}
-            weight="600"
-          >
-            Sign In
-          </Typography>
-        </Button>
-        <Spacer size={10} />
-        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <Typography color={COLORS.LIGHT_GREY}>
-            Don't have an account?
-          </Typography>
-        </TouchableOpacity>
+
+        <Flex column alignItems="center" gap={10}>
+          <Button onClick={handleSignIn} disabled={isDisabled || isLoading}>
+            <Typography
+              color={isLoading ? COLORS.LIGHT_GREY : COLORS.WHITE}
+              size={18}
+              weight="600"
+            >
+              Sign In
+            </Typography>
+          </Button>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <Typography color={COLORS.LIGHT_GREY}>
+              Don't have an account?
+            </Typography>
+          </TouchableOpacity>
+        </Flex>
       </Flex>
     </KeyboardAvoidingView>
   );

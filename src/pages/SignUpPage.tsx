@@ -15,6 +15,7 @@ import { COLORS } from "../palette";
 import { FirebaseError, Navigation } from "../types";
 import { FIREBASE_AUTH } from "../../firebase";
 import { useAuthListenerHook } from "../hooks/useAuthListenerHook";
+import { usersApi } from "../api/usersApi";
 
 interface SignUpPageProps {
   navigation: Navigation;
@@ -64,6 +65,7 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ navigation }) => {
 
     try {
       await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      await usersApi.createUser(FIREBASE_AUTH.currentUser!.uid, email);
     } catch (err) {
       switch ((err as FirebaseError).code) {
         case "auth/invalid-email":
@@ -81,47 +83,52 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Flex column alignItems="center">
-        <Typography size={32} weight="700">
-          Create a new account
-        </Typography>
-        <Spacer size={18} />
-        <Typography size={18}>Please, enter your credentials</Typography>
-        <Spacer size={24} />
-        <Input value={email} setValue={setEmail} placeholder="Email" />
-        <Spacer size={16} />
-        <Input
-          value={password}
-          setValue={setPassword}
-          placeholder="Password"
-          password
-        />
-        <Spacer size={16} />
-        <Input
-          value={repeatPassword}
-          setValue={setRepeatPassword}
-          placeholder="Repeat password"
-          password
-        />
-        <Spacer size={error ? 12 : 24} />
+        <Flex column gap={24}>
+          <Flex column gap={18}>
+            <Typography size={32} weight="700">
+              Create a new account
+            </Typography>
+            <Typography size={18}>Please, enter your credentials</Typography>
+          </Flex>
+          <Flex column alignItems="center" gap={16}>
+            <Input value={email} setValue={setEmail} placeholder="Email" />
+            <Input
+              value={password}
+              setValue={setPassword}
+              placeholder="Password"
+              password
+            />
+            <Input
+              value={repeatPassword}
+              setValue={setRepeatPassword}
+              placeholder="Repeat password"
+              password
+            />
+          </Flex>
+        </Flex>
+
+        <Spacer size={error ? 12 : 20} />
         {error && <Typography color={COLORS.RED}>{error}</Typography>}
         <Spacer size={error ? 12 : 0} />
-        <Button onClick={handleSignUp} disabled={isDisabled || isLoading}>
-          <Typography
-            color={isLoading ? COLORS.LIGHT_GREY : COLORS.WHITE}
-            size={18}
-            weight="600"
-          >
-            Sign Up
-          </Typography>
-        </Button>
-        <Spacer size={10} />
-        <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-          <Typography color={COLORS.LIGHT_GREY}>
-            Already have an account?
-          </Typography>
-        </TouchableOpacity>
+
+        <Flex column alignItems="center" gap={10}>
+          <Button onClick={handleSignUp} disabled={isDisabled || isLoading}>
+            <Typography
+              color={isLoading ? COLORS.LIGHT_GREY : COLORS.WHITE}
+              size={18}
+              weight="600"
+            >
+              Sign Up
+            </Typography>
+          </Button>
+          <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+            <Typography color={COLORS.LIGHT_GREY}>
+              Already have an account?
+            </Typography>
+          </TouchableOpacity>
+        </Flex>
       </Flex>
     </KeyboardAvoidingView>
   );

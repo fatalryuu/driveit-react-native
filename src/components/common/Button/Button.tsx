@@ -7,16 +7,21 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick: () => void | Promise<void>;
   disabled?: boolean;
+  dark?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
   disabled,
+  dark,
 }) => {
-  const buttonStyle = disabled
-    ? { ...styles.button, ...styles.disabledButton }
+  const colorStyle = dark
+    ? { ...styles.button, ...styles.darkButton }
     : styles.button;
+  const buttonStyle = disabled
+    ? { ...colorStyle, ...styles.disabledButton }
+    : colorStyle;
 
   return (
     <View style={styles.container}>
@@ -42,5 +47,8 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: COLORS.DARK_GREY,
+  },
+  darkButton: {
+    backgroundColor: COLORS.PRIMARY_DARK,
   },
 });

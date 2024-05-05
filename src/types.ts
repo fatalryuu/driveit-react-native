@@ -4,6 +4,8 @@ export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   Profile: undefined;
+  Cars: undefined;
+  Favourites: undefined;
 };
 
 export type Navigation =

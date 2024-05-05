@@ -8,8 +8,6 @@ export const useAuthListenerHook = (navigation: Navigation) => {
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       if (user) {
         navigation.navigate("Profile");
-      } else {
-        navigation.navigate("SignIn");
       }
     });
   }, []);

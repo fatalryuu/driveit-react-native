@@ -1,17 +1,28 @@
-import { initializeApp, app } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+  MEASUREMENT_ID,
+} from "@env";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyARdUUDP45_4FzPSuY0W7p5epiRP9ju9Z8",
-  authDomain: "bsuir-mobiles-development.firebaseapp.com",
-  projectId: "bsuir-mobiles-development",
-  storageBucket: "bsuir-mobiles-development.appspot.com",
-  messagingSenderId: "407513828007",
-  appId: "1:407513828007:web:76f951a21f810a82f5e982",
-  measurementId: "G-G3W6DVY3PG",
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID,
 };
 
 const FIREBASE_APP = initializeApp(firebaseConfig);
 const FIREBASE_AUTH = getAuth(FIREBASE_APP);
+const FIREBASE_DB = getFirestore(FIREBASE_APP);
 
-export { FIREBASE_AUTH };
+export { FIREBASE_AUTH, FIREBASE_DB };
