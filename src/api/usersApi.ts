@@ -2,10 +2,11 @@ import {
   doc,
   setDoc,
   getDoc,
-  QueryDocumentSnapshot,
+  deleteDoc,
   DocumentData,
 } from "firebase/firestore";
-import { FIREBASE_DB } from "../../firebase";
+import { deleteUser } from "firebase/auth";
+import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 
 export interface FirestoreUser {
   id: string;
@@ -23,22 +24,6 @@ export interface FirestoreUser {
 }
 
 class UsersApi {
-  private getUserFromSnapshot(snapshot: DocumentData): FirestoreUser {
-    return {
-      id: snapshot.id,
-      email: snapshot.email,
-      name: snapshot.name,
-      surname: snapshot.surname,
-      username: snapshot.username,
-      birthday: snapshot.birthday,
-      job: snapshot.job,
-      country: snapshot.country,
-      city: snapshot.city,
-      education: snapshot.education,
-      hobby: snapshot.hobby,
-      social: snapshot.social,
-    };
-  }
   async createUser(id: string, email: string): Promise<void> {
     const userRef = doc(FIREBASE_DB, "users", id);
     await setDoc(userRef, { id, email });
@@ -56,8 +41,47 @@ class UsersApi {
 
   async updateUser(user: FirestoreUser): Promise<void> {
     const userRef = doc(FIREBASE_DB, "users", user.id);
-    await setDoc(userRef, user);
+    await setDoc(userRef, this.replaceUndefinedWithString(user));
   }
+
+  async deleteUser(id: string): Promise<void> {
+    await deleteUser(FIREBASE_AUTH.currentUser!);
+    const userRef = doc(FIREBASE_DB, "users", id);
+    await deleteDoc(userRef);
+  }
+
+  private getUserFromSnapshot(snapshot: DocumentData): FirestoreUser {
+    return {
+      id: snapshot.id,
+      email: snapshot.email,
+      name: snapshot.name,
+      surname: snapshot.surname,
+      username: snapshot.username,
+      birthday: snapshot.birthday,
+      job: snapshot.job,
+      country: snapshot.country,
+      city: snapshot.city,
+      education: snapshot.education,
+      hobby: snapshot.hobby,
+      social: snapshot.social,
+    };
+  }
+
+  private replaceUndefinedWithString = (user: FirestoreUser): FirestoreUser => {
+    return {
+      ...user,
+      name: user.name ?? "",
+      surname: user.surname ?? "",
+      username: user.username ?? "",
+      birthday: user.birthday ?? "",
+      job: user.job ?? "",
+      country: user.country ?? "",
+      city: user.city ?? "",
+      education: user.education ?? "",
+      hobby: user.hobby ?? "",
+      social: user.social ?? "",
+    };
+  };
 }
 
 export const usersApi = new UsersApi();

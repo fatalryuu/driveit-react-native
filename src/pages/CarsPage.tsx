@@ -4,6 +4,7 @@ import { Flex } from "../components/common/Flex/Flex";
 import { Spacer } from "../components/common/Spacer/Spacer";
 import { Typography } from "../components/common/Typography/Typography";
 import { Navigation } from "../types";
+import { COLORS } from "../palette";
 
 interface CarsPageProps {
   navigation: Navigation;
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#090909",
+    backgroundColor: COLORS.BLACK,
     width: "100%",
   },
   scrollContainer: {

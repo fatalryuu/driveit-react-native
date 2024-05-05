@@ -14,6 +14,7 @@ import { FirestoreUser, usersApi } from "../api/usersApi";
 import { Flex } from "../components/common/Flex/Flex";
 import { ProfileInput } from "../components/common/ProfileInput/ProfileInput";
 import { Spacer } from "../components/common/Spacer/Spacer";
+import { COLORS } from "../palette";
 
 const inputs: (keyof FirestoreUser)[] = [
   "name",
@@ -58,9 +59,21 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
     setIsEditing(!isEditing);
   };
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
     signOut(FIREBASE_AUTH);
-    navigation.replace("SignIn");
+    navigation.navigate("SignIn");
+  };
+
+  const handleDeleteClick = async () => {
+    setIsLoading(true);
+    try {
+      await usersApi.deleteUser(user!.id);
+    } catch (err) {
+      alert((err as FirebaseError).message);
+    } finally {
+      setIsLoading(false);
+    }
+    handleLogoutClick();
   };
 
   return (
@@ -94,21 +107,23 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
             )}
           </Flex>
 
-          <Flex column alignItems="center" gap={10}>
-            <Button onClick={handleEditClick} disabled={isLoading}>
-              <Typography>
-                {isEditing ? "Save changes" : "Edit profile"}
-              </Typography>
-            </Button>
-            <Button onClick={handleLogout} disabled={isLoading}>
-              <Typography>Logout</Typography>
-            </Button>
-            <Button onClick={() => {}} dark disabled={isLoading}>
+          <Flex column alignItems="center" gap={20}>
+            <Flex column alignItems="center" gap={10}>
+              <Button onClick={handleEditClick} disabled={isLoading}>
+                <Typography>
+                  {isEditing ? "Save changes" : "Edit profile"}
+                </Typography>
+              </Button>
+              <Button onClick={handleLogoutClick} disabled={isLoading}>
+                <Typography>Logout</Typography>
+              </Button>
+            </Flex>
+            <Button onClick={handleDeleteClick} dark disabled={isLoading}>
               <Typography>Delete account</Typography>
             </Button>
           </Flex>
         </Flex>
-        <Spacer size={120} />
+        <Spacer size={100} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -120,7 +135,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#090909",
+    backgroundColor: COLORS.BLACK,
     width: "100%",
   },
   scrollContainer: {
