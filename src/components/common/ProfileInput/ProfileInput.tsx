@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { COLORS } from "../../../palette";
 import { FirestoreUser } from "../../../api/usersApi";
 import { Flex } from "../Flex/Flex";
@@ -9,7 +10,7 @@ interface ProgileInputProps {
   value: string;
   setUser: React.Dispatch<React.SetStateAction<FirestoreUser | undefined>>;
   name: string;
-  placeholder: string;
+  title: string;
   disabled?: boolean;
 }
 
@@ -17,7 +18,7 @@ export const ProfileInput: React.FC<ProgileInputProps> = ({
   value,
   setUser,
   name,
-  placeholder,
+  title,
   disabled,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -25,13 +26,36 @@ export const ProfileInput: React.FC<ProgileInputProps> = ({
     ? { ...styles.inputContainer, ...styles.inputContainerFocused }
     : styles.inputContainer;
 
-  return (
+  return name === "birthday" ? (
+    <View style={{ width: "80%" }}>
+      <Flex alignItems="center" justifyContent="space-between">
+        <Typography>Birthday</Typography>
+        {value || !disabled ? (
+          <DateTimePicker
+            value={value ? new Date(value) : new Date()}
+            mode="date"
+            onChange={(_, date) =>
+              setUser((prev) => ({
+                ...(prev as FirestoreUser),
+                birthday: date?.toISOString(),
+              }))
+            }
+            accentColor={COLORS.PRIMARY}
+            themeVariant="dark"
+            disabled={disabled}
+          />
+        ) : (
+          <Typography>No data</Typography>
+        )}
+      </Flex>
+    </View>
+  ) : (
     <View style={styles.container}>
       <Flex column alignItems="flex-start" gap={6}>
-        <Typography>{placeholder}</Typography>
+        <Typography>{title}</Typography>
         <View style={containerStyle}>
           <TextInput
-            placeholder={placeholder}
+            placeholder="No data"
             placeholderTextColor={COLORS.DARK_GREY}
             value={value}
             onChangeText={(text) =>

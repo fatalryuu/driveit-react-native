@@ -4,6 +4,7 @@ import {
   getDoc,
   deleteDoc,
   DocumentData,
+  DocumentReference,
 } from "firebase/firestore";
 import { deleteUser } from "firebase/auth";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
@@ -21,6 +22,7 @@ export interface FirestoreUser {
   education?: string;
   hobby?: string;
   social?: string;
+  favourites: DocumentReference[];
 }
 
 class UsersApi {
@@ -64,6 +66,7 @@ class UsersApi {
       education: snapshot.education,
       hobby: snapshot.hobby,
       social: snapshot.social,
+      favourites: snapshot.favourites,
     };
   }
 
@@ -80,6 +83,7 @@ class UsersApi {
       education: user.education ?? "",
       hobby: user.hobby ?? "",
       social: user.social ?? "",
+      favourites: user.favourites ?? [],
     };
   };
 }

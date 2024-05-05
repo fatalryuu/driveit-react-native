@@ -17,7 +17,7 @@ import { ProfileInput } from "../components/common/ProfileInput/ProfileInput";
 import { Spacer } from "../components/common/Spacer/Spacer";
 import { COLORS } from "../palette";
 
-const inputs: (keyof FirestoreUser)[] = [
+const inputs: (keyof Omit<FirestoreUser, "favourites">)[] = [
   "name",
   "surname",
   "username",
@@ -101,7 +101,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
             <Flex column gap={12} alignItems="center">
               {inputs.map((name) => (
                 <ProfileInput
-                  placeholder={name.slice(0, 1).toUpperCase() + name.slice(1)}
+                  title={name.slice(0, 1).toUpperCase() + name.slice(1)}
                   name={name}
                   value={user[name] || ""}
                   disabled={!isEditing}
