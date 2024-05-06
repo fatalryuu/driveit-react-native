@@ -1,21 +1,21 @@
+import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import { signOut } from "firebase/auth";
-import { Button } from "../components/common/Button/Button";
-import { Typography } from "../components/common/Typography/Typography";
-import { FirebaseError, Navigation } from "../types";
 import { FIREBASE_AUTH } from "../../firebase";
 import { FirestoreUser, usersApi } from "../api/usersApi";
+import { Button } from "../components/common/Button/Button";
 import { Flex } from "../components/common/Flex/Flex";
+import { Loader } from "../components/common/Loader/Loader";
 import { ProfileInput } from "../components/common/ProfileInput/ProfileInput";
 import { Spacer } from "../components/common/Spacer/Spacer";
+import { Typography } from "../components/common/Typography/Typography";
 import { COLORS } from "../palette";
+import { FirebaseError, Navigation } from "../types";
 
 const inputs: (keyof Omit<FirestoreUser, "favourites">)[] = [
   "name",
@@ -80,7 +80,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
   if (!user) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" />
+        <Loader />
       </View>
     );
   }

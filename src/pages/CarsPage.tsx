@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { FirestoreCar, carsApi } from "../api/carsApi";
+import { CarCard } from "../components/common/CarCard/CarCard";
 import { Flex } from "../components/common/Flex/Flex";
+import { Loader } from "../components/common/Loader/Loader";
 import { Spacer } from "../components/common/Spacer/Spacer";
 import { Typography } from "../components/common/Typography/Typography";
-import { FirebaseError, Navigation } from "../types";
-import { COLORS } from "../palette";
-import { FirestoreCar, carsApi } from "../api/carsApi";
-import { CarCard } from "../components/pages/common/CarCard/CarCard";
 import { SearchInput } from "../components/pages/CarsPage/SearchInput/SearchInput";
+import { COLORS } from "../palette";
+import { FirebaseError, Navigation } from "../types";
 
 interface CarsPageProps {
   navigation: Navigation;
@@ -35,7 +34,7 @@ export const CarsPage: React.FC<CarsPageProps> = ({ navigation }) => {
   if (cars.length === 0) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" />
+        <Loader />
       </View>
     );
   }
@@ -63,8 +62,9 @@ export const CarsPage: React.FC<CarsPageProps> = ({ navigation }) => {
               filteredCars.map((car) => (
                 <TouchableOpacity
                   onPress={() => navigation.navigate("Car", { car })}
+                  key={car.id}
                 >
-                  <CarCard car={car} key={car.id} />
+                  <CarCard car={car} />
                 </TouchableOpacity>
               ))
             ) : (

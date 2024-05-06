@@ -12,6 +12,9 @@ import { COLORS } from "../palette";
 import { Navigation, RootStackParamList } from "../types";
 import { FontAwesome } from "@expo/vector-icons";
 import { Flex } from "../components/common/Flex/Flex";
+import { Spacer } from "../components/common/Spacer/Spacer";
+import { PageTitle } from "../components/pages/CarInfoPage/PageTitle/PageTitle";
+import { ImagesSlider } from "../components/pages/CarInfoPage/ImagesSlider/ImagesSlider";
 
 type Route = NativeStackScreenProps<RootStackParamList, "Car">["route"];
 
@@ -25,14 +28,17 @@ export const CarInfoPage: React.FC<CarInfoProps> = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.arrow}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesome name="chevron-left" size={24} color={COLORS.PRIMARY} />
-        </TouchableOpacity>
-      </View>
-      <Typography weight="600" size={24}>
-        {car.name}
-      </Typography>
+      <PageTitle name={car.name} navigation={navigation} />
+
+      <Spacer size={30} />
+
+      {car.images.length ? (
+        <ImagesSlider images={car.images} />
+      ) : (
+        <Typography weight="700" size={24} color={COLORS.DARK_GREY}>
+          No images of this car yet
+        </Typography>
+      )}
     </View>
   );
 };
@@ -46,9 +52,13 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     width: "100%",
   },
+  nameWrapper: {
+    width: "80%",
+    marginLeft: "3%",
+  },
   arrow: {
     position: "absolute",
-    top: 60,
+    top: 68,
     left: 20,
   },
 });

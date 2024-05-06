@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { FirestoreCar } from "../../../../api/carsApi";
-import { COLORS } from "../../../../palette";
-import { Typography } from "../../../common/Typography/Typography";
+import { FirestoreCar } from "../../../api/carsApi";
+import { COLORS } from "../../../palette";
+import { Typography } from "../Typography/Typography";
 
 interface CarCardProps {
   car: FirestoreCar;
