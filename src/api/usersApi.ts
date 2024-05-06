@@ -5,9 +5,13 @@ import {
   deleteDoc,
   DocumentData,
   DocumentReference,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { deleteUser } from "firebase/auth";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
+import { carsApi } from "./carsApi";
 
 export interface FirestoreUser {
   id: string;
@@ -50,6 +54,22 @@ class UsersApi {
     await deleteUser(FIREBASE_AUTH.currentUser!);
     const userRef = doc(FIREBASE_DB, "users", id);
     await deleteDoc(userRef);
+  }
+
+  async addCarToFavourites(carId: string): Promise<void> {
+    const user = FIREBASE_AUTH.currentUser!;
+    const userRef = doc(FIREBASE_DB, "users", user.uid);
+    await updateDoc(userRef, {
+      favourites: arrayUnion(carsApi.getCarDocumentReference(carId)),
+    });
+  }
+
+  async removeCarFromFavourites(carId: string): Promise<void> {
+    const user = FIREBASE_AUTH.currentUser!;
+    const userRef = doc(FIREBASE_DB, "users", user.uid);
+    await updateDoc(userRef, {
+      favourites: arrayRemove(carsApi.getCarDocumentReference(carId)),
+    });
   }
 
   private getUserFromSnapshot(snapshot: DocumentData): FirestoreUser {
