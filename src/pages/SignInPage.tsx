@@ -13,7 +13,7 @@ import { Spacer } from "../components/common/Spacer/Spacer";
 import { Typography } from "../components/common/Typography/Typography";
 import { COLORS } from "../palette";
 import { FirebaseError, Navigation } from "../types";
-import { FIREBASE_AUTH } from "../../firebase";
+import { getAuth } from "../../firebase";
 import { useAuthListenerHook } from "../hooks/useAuthListenerHook";
 
 interface SignInPageProps {
@@ -57,7 +57,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({ navigation }) => {
     setIsLoading(true);
 
     try {
-      await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      await signInWithEmailAndPassword(getAuth(), email, password);
     } catch (err) {
       switch ((err as FirebaseError).code) {
         case "auth/invalid-email":

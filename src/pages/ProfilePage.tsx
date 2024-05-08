@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { FIREBASE_AUTH } from "../../firebase";
+import { getAuth } from "../../firebase";
 import { FirestoreUser, usersApi } from "../api/usersApi";
 import { Button } from "../components/common/Button/Button";
 import { Flex } from "../components/common/Flex/Flex";
@@ -41,7 +41,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
 
   useEffect(() => {
     usersApi
-      .getUser(FIREBASE_AUTH.currentUser!.uid)
+      .getUser(getAuth().currentUser!.uid)
       .then(setUser)
       .catch((err: FirebaseError) => alert(err.message));
   }, []);
@@ -61,7 +61,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
   };
 
   const handleLogoutClick = () => {
-    signOut(FIREBASE_AUTH);
+    signOut(getAuth());
     navigation.navigate("SignIn");
   };
 

@@ -13,7 +13,7 @@ import { Spacer } from "../components/common/Spacer/Spacer";
 import { Typography } from "../components/common/Typography/Typography";
 import { COLORS } from "../palette";
 import { FirebaseError, Navigation } from "../types";
-import { FIREBASE_AUTH } from "../../firebase";
+import { getAuth } from "../../firebase";
 import { useAuthListenerHook } from "../hooks/useAuthListenerHook";
 import { usersApi } from "../api/usersApi";
 
@@ -64,8 +64,8 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({ navigation }) => {
     setIsLoading(true);
 
     try {
-      await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-      await usersApi.createUser(FIREBASE_AUTH.currentUser!.uid, email);
+      await createUserWithEmailAndPassword(getAuth(), email, password);
+      await usersApi.createUser(getAuth().currentUser!.uid, email);
     } catch (err) {
       switch ((err as FirebaseError).code) {
         case "auth/invalid-email":

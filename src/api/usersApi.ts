@@ -10,7 +10,7 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { deleteUser } from "firebase/auth";
-import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
+import { getAuth, FIREBASE_DB } from "../../firebase";
 import { FirestoreCar, carsApi } from "./carsApi";
 
 export interface FirestoreUser {
@@ -51,13 +51,13 @@ class UsersApi {
   }
 
   async deleteUser(id: string): Promise<void> {
-    await deleteUser(FIREBASE_AUTH.currentUser!);
+    await deleteUser(getAuth().currentUser!);
     const userRef = doc(FIREBASE_DB, "users", id);
     await deleteDoc(userRef);
   }
 
   async getFavouriteCars(): Promise<FirestoreCar[]> {
-    const user = FIREBASE_AUTH.currentUser!;
+    const user = getAuth().currentUser!;
     const userRef = doc(FIREBASE_DB, "users", user.uid);
     const userDocSnapshot = await getDoc(userRef);
     const userData = userDocSnapshot.data() as FirestoreUser;
@@ -76,7 +76,7 @@ class UsersApi {
   }
 
   async addCarToFavourites(carId: string): Promise<void> {
-    const user = FIREBASE_AUTH.currentUser!;
+    const user = getAuth().currentUser!;
     const userRef = doc(FIREBASE_DB, "users", user.uid);
     await updateDoc(userRef, {
       favourites: arrayUnion(carsApi.getCarDocumentReference(carId)),
@@ -84,7 +84,7 @@ class UsersApi {
   }
 
   async removeCarFromFavourites(carId: string): Promise<void> {
-    const user = FIREBASE_AUTH.currentUser!;
+    const user = getAuth().currentUser!;
     const userRef = doc(FIREBASE_DB, "users", user.uid);
     await updateDoc(userRef, {
       favourites: arrayRemove(carsApi.getCarDocumentReference(carId)),
