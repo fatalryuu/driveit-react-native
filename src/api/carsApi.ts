@@ -52,7 +52,7 @@ class CarsApi {
     return doc(FIREBASE_DB, "cars", id);
   }
 
-  private getCarFromSnapshot(snapshot: DocumentData): FirestoreCar {
+  getCarFromSnapshot(snapshot: DocumentData): FirestoreCar {
     return {
       id: snapshot.id,
       name: snapshot.name,

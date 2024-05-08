@@ -27,13 +27,13 @@ export const CarsPage: React.FC<CarsPageProps> = ({ navigation }) => {
   useEffect(() => {
     carsApi
       .getCars()
-      .then((cars) => setCars(cars))
+      .then(setCars)
       .catch((err: FirebaseError) => alert(err.message));
   }, []);
 
   if (cars.length === 0) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { justifyContent: "center" }]}>
         <Loader />
       </View>
     );

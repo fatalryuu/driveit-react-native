@@ -42,7 +42,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigation }) => {
   useEffect(() => {
     usersApi
       .getUser(FIREBASE_AUTH.currentUser!.uid)
-      .then((user) => setUser(user))
+      .then(setUser)
       .catch((err: FirebaseError) => alert(err.message));
   }, []);
 
